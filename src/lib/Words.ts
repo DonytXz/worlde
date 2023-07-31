@@ -1,5 +1,5 @@
-// import Words from "@@/public/words2.md"; //test faster
-import Words from "@@/public/words.md"//original slower
+import Words from "@@/public/words2.md"; //test faster
+// import Words from "@@/public/words.md"//original slower
 
 let sanitizedWordsArr: Array<string> = [];
 export const makeWordsArray = async () => {
