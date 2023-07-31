@@ -1,19 +1,16 @@
-import Board from "@/components/Board/Board";
-import Header from "@/components/Header";
-import Keyboard from "@/components/Keyboard/Keyboard";
+// "use client";
+// import { createContext, useEffect, useState } from "react";
+import Wordle from "./pages/Wordle";
+import { makeWordsArray } from "@/lib/Words";
 
-export default function Home() {
+export default async function Home() {
+  const words: any =  await makeWordsArray();
+  const date = Date.now();
   return (
-    <main className="min-h-screen">
-      <div className="flex flex-col px-10 py-20">
-        <div className="pb-16">
-          <Header />
-        </div>
-        <div className="pb-16">
-          <Board />
-        </div>
-        <Keyboard />
-      </div>
-    </main>
-  )
+    <>
+      <main className="min-h-full h-full max-w-screen no-scrollbar overflow-x-hidden">
+        <Wordle date={date} words={words} />
+      </main>
+    </>
+  );
 }
