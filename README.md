@@ -1,3 +1,10 @@
+## To test with all of the words
+- Download this file and renamed as words.md
+https://gitlab.com/d2945/words/-/raw/main/words.txt
+- Coppy the file to the public dir
+- Coment line 1 on src > lib Words.ts
+- Uncoment line 2 on src > lib Words.ts
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
