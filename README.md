@@ -5,6 +5,8 @@ https://gitlab.com/d2945/words/-/raw/main/words.txt
 - Coment line 1 on src > lib Words.ts
 - Uncoment line 2 on src > lib Words.ts
 
+## npm install
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
