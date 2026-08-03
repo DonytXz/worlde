@@ -1,43 +1,39 @@
-## To test with all of the words
-- Download this file and renamed as words.md
-https://gitlab.com/d2945/words/-/raw/main/words.txt
-- Coppy the file to the public dir
-- Coment line 1 on src > lib Words.ts
-- Uncoment line 2 on src > lib Words.ts
+# Worlde
 
-## npm install
+A five-letter word guessing game built with React and Vite and deployed as a
+static site on GitHub Pages.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Local development
 
-## Getting Started
+Use Node.js 22, then install the locked dependencies and start the development
+server:
 
-First, run the development server:
-
-```bash
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verification
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Run all local quality gates and produce the static site in `dist/`:
 
-## Learn More
+```sh
+npm run check
+npm audit
+```
 
-To learn more about Next.js, take a look at the following resources:
+## GitHub Pages deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Pushes to `master` trigger `.github/workflows/deploy-pages.yml`. The workflow
+checks the app, builds the static export, and deploys it through GitHub Pages.
+It can also be started manually from the repository's Actions tab.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Project Pages paths are calculated from `GITHUB_REPOSITORY`, while user or
+organization Pages repositories ending in `.github.io` are served from `/`.
 
-## Deploy on Vercel
+## Word list
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The build reads five-letter entries from `public/words2.md`. To use a different
+list, replace that file and keep one word per line.

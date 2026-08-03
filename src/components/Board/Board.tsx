@@ -3,7 +3,7 @@ import React from "react";
 import Letter from "./Letter";
 
 const Board = (props: any) => {
-  let userLettersInput: any = [];
+  const userLettersInput: any = [];
   const defaultPlaces: any = [];
   let pos: any = 0;
   let startingElement = 0;
@@ -37,8 +37,6 @@ const Board = (props: any) => {
     const calc = index - startingElement;
 
     let status = false;
-    console.log(calc >= 0, calc, {index}, {startingElement}, {pos}, [rowCharacter]);
-    
     if (calc >= 0) {
       const statusRow = statusArr?.[pos];
       const statusElement = statusRow?.[calc];

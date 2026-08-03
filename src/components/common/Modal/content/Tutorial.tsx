@@ -3,9 +3,11 @@ import Letter from "@/components/Board/Letter";
 
 const Tutorial = (props: any) => {
   const handleClose = () => {
-    props.type == "tutorial"
-      ? props.setShow.setshowTutorial(false)
-      : props.setShow.setshowStats(false);
+    if (props.type == "tutorial") {
+      props.setShow.setshowTutorial(false);
+    } else {
+      props.setShow.setshowStats(false);
+    }
   };
 
   return (

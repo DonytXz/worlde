@@ -1,5 +1,6 @@
 import React from "react";
-import Image from "next/image";
+
+const asset = (name: string) => `${import.meta.env.BASE_URL}${name}`;
 
 const Digit = (props: any) => {
   const handleKeyBoardDigit = () => {
@@ -29,20 +30,18 @@ const Digit = (props: any) => {
           {props.digit == "delete" ? (
             <div className="flex justify-center items-center">
               {props.theme == "dark" ? (
-                <Image
-                  src="/inc_remove_white.svg"
-                  alt="Vercel Logo"
+                <img
+                  src={asset("inc_remove_white.svg")}
+                  alt="Delete letter"
                   width={22.3}
                   height={16}
-                  priority
                 />
               ) : (
-                <Image
-                  src="/inc_remove.svg"
-                  alt="Vercel Logo"
+                <img
+                  src={asset("inc_remove.svg")}
+                  alt="Delete letter"
                   width={22.3}
                   height={16}
-                  priority
                 />
               )}
             </div>

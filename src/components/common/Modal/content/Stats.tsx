@@ -1,28 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Countdown from "react-countdown";
 
 const Stats = (props: any) => {
   const handleClose = () => {
-    props.type == "tutorial"
-      ? props.setShow.setshowTutorial(false)
-      : props.setShow.setshowStats(false);
-  };
-  const [reset, setReset] = useState(1);
-
-  useEffect(() => {
-    if(props.prev != ""){
-      setReset(reset+1);
+    if (props.type == "tutorial") {
+      props.setShow.setshowTutorial(false);
+    } else {
+      props.setShow.setshowStats(false);
     }
-  }, [])
+  };
+  const { date, newDate, setPrevWord } = props;
   
   useEffect(() => {
-    if(props.newDate !=  props.date){
+    if(newDate != date){
       //on unmont - destroy clean the prev word
       return () => {
-        props.setPrevWord("");
+        setPrevWord("");
       }
     }
-  }, [props.newDate])
+  }, [date, newDate, setPrevWord])
   
   
 
@@ -52,7 +48,7 @@ const Stats = (props: any) => {
           </div>
           <span className="text-center">SIGUIENTE PALABRA</span>
           <p className="font-bold text-center">
-            <Countdown key={reset} date={props.newDate !=  props.date ? props.newDate + 300000 : props.date + 300000} />
+            <Countdown key={newDate} date={newDate != date ? newDate + 300000 : date + 300000} />
           </p>
           {props.prevWord ? (
             <p className="font-bold text-center text-xl py-6">

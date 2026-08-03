@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/exhaustive-deps -- keyboard actions run only when their counters or rows change */
 import React, { useEffect, useState } from "react";
 import Digit from "./Digit";
 
@@ -108,7 +109,7 @@ const Keyboard = (props: any) => {
     props.findChart.setChartFind([...props.findChart.chartFind, findArrAux]);
   };
 
-  queryKeyboard.map((element: string, index: number, array: any) => {
+  queryKeyboard.map((element: string, index: number) => {
     if (index < 10) {
       fristRow.push(
         <Digit
@@ -153,12 +154,7 @@ const Keyboard = (props: any) => {
         props.findChart.setChartFind((prevArr: Array<string>) =>
           prevArr.slice(0, -1)
         );
-      } else if (
-        digit == "enter" &&
-        props.rows.length > 0 &&
-        props.rows.length % 5 == 0
-      ) {
-      } else if (digit != "delete" && digit != "enter") {
+      } else if (digit != "enter") {
         props.setRows([...props.rows, digit]);
       }
     }

@@ -1,6 +1,6 @@
 "use client";
+/* eslint-disable react-hooks/exhaustive-deps -- legacy game timers intentionally initialize once */
 import Board from "@/components/Board/Board";
-import Letter from "@/components/Board/Letter";
 import Header from "@/components/Header";
 import Keyboard from "@/components/Keyboard/Keyboard";
 import Modal from "@/components/common/Modal/Modal";
@@ -34,7 +34,7 @@ const Wordle = (props: any) => {
     setRows([]);
   }, [wins]);
   function choseWord() {
-    let currentWordAux: any = { val: "", idx: null };
+    const currentWordAux: any = { val: "", idx: null };
     let coppyObj: any = {};
     if (props.words.length > 0) {
       currentWordAux.idx = Math.floor(Math.random() * props.words.length);
@@ -48,22 +48,19 @@ const Wordle = (props: any) => {
   }
 
   useEffect(() => {
-    const victoryArrr: Array<string> = ["good", "good", "good", "good", "good"];
-    chartFind.map((statusRow: any) => {
-      if (chartFind.length == 5) {
-        const isGame: any = !(chartFind as Array<Array<string>>).includes(
-          victoryArrr
-        );
-        if (isGame) {
-          setNewDate(Date.now());
-          setPrevWord(currentWChartArr2.slice());
-          setRows([]);
-          setChartFind([]);
-          setshowStats(true);
-          choseWord();
-        }
+    if (chartFind.length == 5) {
+      const isGame = !(chartFind as Array<Array<string>>).some(
+        (statusRow) => statusRow.every((status) => status === "good"),
+      );
+      if (isGame) {
+        setNewDate(Date.now());
+        setPrevWord(currentWChartArr2.slice());
+        setRows([]);
+        setChartFind([]);
+        setshowStats(true);
+        choseWord();
       }
-    });
+    }
   }, [chartFind]);
 
   useEffect(() => {
