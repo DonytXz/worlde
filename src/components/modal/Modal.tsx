@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { createPortal } from "react-dom";
 
 export interface ModalProps {
   children: React.ReactNode;
@@ -28,11 +27,11 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
     };
   }, []);
 
-  const content = (
+  return (
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto no-scrollbar animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto no-scrollbar"
       onClick={onClose}
     >
       <div
@@ -43,8 +42,6 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
       </div>
     </div>
   );
-
-  return createPortal(content, document.body);
 };
 
 export default Modal;

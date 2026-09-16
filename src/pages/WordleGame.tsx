@@ -11,7 +11,7 @@ import { useGameStats } from "@/hooks/useGameStats";
 import { useDisclosure } from "@/hooks/useDisclosure";
 import { useWordleGame } from "@/hooks/useWordleGame";
 import { useKeyboardInput } from "@/hooks/useKeyboardInput";
-import { hasSeenTutorial, markTutorialAsSeen } from "@/utils/wordle";
+import { markTutorialAsSeen } from "@/utils/wordle";
 
 export interface WordleGameProps {
   words: string[];
@@ -24,8 +24,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({ words }) => {
   // Statistics state
   const { stats, recordResult } = useGameStats();
 
-  // Modal disclosures
-  const tutorialModal = useDisclosure(!hasSeenTutorial());
+  // Modal disclosures: requirement 2 specifies showing instructions on first load
+  const tutorialModal = useDisclosure(true);
   const statsModal = useDisclosure(false);
 
   // Close tutorial handler marking it as seen
