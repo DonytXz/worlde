@@ -2,20 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-.lastKeyboardRow {
-  grid-template-columns: 71.783px repeat(7, 44.5px) 71.783px;
-}
-
-/* Chrome, Safari and Opera */
+/* Scrollbar utility */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 .no-scrollbar {
   -ms-overflow-style: none;
-  /* IE and Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 * {
@@ -29,40 +23,27 @@ body,
   margin: 0;
 }
 
-/*
-Toggle theme
-*/
-#light {
-  background: white !important;
-  color: #202537;
+/* CSS Theme Variables */
+:root {
+  --bg-main: #ffffff;
+  --text-main: #202537;
+  --bg-modal: rgba(243, 243, 243, 0.95);
 }
 
-#dark {
-  background: #262B3C !important;
-  color: #ffffff;
+.dark {
+  --bg-main: #262B3C;
+  --text-main: #ffffff;
+  --bg-modal: #161616;
 }
 
-#light #tutorialContent {
-  background: rgba(243, 243, 243, 0.95) !important;
-  color: #202537 !important;
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-#dark #tutorialContent {
-  background: #161616 !important;
-  color: #ffffff !important;
-}
-
-#light #statsContent {
-  background: rgba(243, 243, 243, 0.95) !important;
-  color: #202537 !important;
-}
-
-#dark #statsContent {
-  background: #161616 !important;
-  color: #ffffff !important;
-}
-
-#dark #letter {
-  background: #161616 !important;
-  color: #ffffff !important;
+#tutorialContent,
+#statsContent {
+  background-color: var(--bg-modal);
+  color: var(--text-main);
 }

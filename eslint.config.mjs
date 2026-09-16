@@ -19,7 +19,6 @@ export default tseslint.config(
       globals: globals.browser,
     },
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
       "react-hooks/immutability": "off",
       "react-hooks/set-state-in-effect": "off",
     },
