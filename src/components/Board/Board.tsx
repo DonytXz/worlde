@@ -1,63 +1,91 @@
-"use client";
 import React from "react";
 import Letter from "./Letter";
+import { LetterStatus } from "@/utils/wordle";
 
-const Board = (props: any) => {
-  const userLettersInput: any = [];
-  const defaultPlaces: any = [];
-  let pos: any = 0;
-  let startingElement = 0;
-  const statusArr = props.chartFind;
-  const rows = props.rows;
+interface BoardProps {
+  guesses?: string[];
+  evaluations?: LetterStatus[][];
+  currentGuess?: string;
+  theme?: "light" | "dark";
+  // Backward compatibility with previous flat props
+  rows?: string[];
+  chartFind?: LetterStatus[][];
+  currentWChartArr?: string[];
+}
 
-  const configureDefaultPlaces = () => {
-    for (let i = 0; i < 25; i++) {
-      defaultPlaces.push(<Letter key={i} />);
+const Board: React.FC<BoardProps> = ({
+  guesses,
+  evaluations,
+  currentGuess = "",
+  theme,
+  rows,
+  chartFind,
+}) => {
+  // If modern structured props are provided, use them
+  let resolvedGuesses: string[] = [];
+  let resolvedEvaluations: LetterStatus[][] = [];
+  let activeGuess = currentGuess;
+
+  if (guesses && evaluations) {
+    resolvedGuesses = guesses;
+    resolvedEvaluations = evaluations;
+  } else if (rows) {
+    // Legacy adapter for flat array of characters
+    const totalChars = rows.length;
+    const completedRowsCount = chartFind ? chartFind.length : Math.floor(totalChars / 5);
+    for (let r = 0; r < completedRowsCount; r++) {
+      resolvedGuesses.push(rows.slice(r * 5, r * 5 + 5).join(""));
     }
-  };
-  configureDefaultPlaces();
-  
-  rows.map((rowCharacter: any, index: number) => {
-    if (index + 1 <= 5) {
-      pos = 0;
-      startingElement = 0;
-    } else if (index + 1 <= 10) {
-      pos = 1;
-      startingElement = 5;
-    } else if (index + 1 <= 15) {
-      pos = 2;
-      startingElement = 10;
-    } else if (index + 1 <= 20) {
-      pos = 3;
-      startingElement = 15;
-    } else if (index + 1 <= 25) {
-      pos = 4;
-      startingElement = 20;
-    }
-    const calc = index - startingElement;
+    resolvedEvaluations = chartFind || [];
+    activeGuess = rows.slice(completedRowsCount * 5).join("");
+  }
 
-    let status = false;
-    if (calc >= 0) {
-      const statusRow = statusArr?.[pos];
-      const statusElement = statusRow?.[calc];
-      status = statusElement;
-    }
-    
-    
+  const boardCells: React.ReactNode[] = [];
 
-    userLettersInput.push(
-      <Letter status={status} letter={rowCharacter} key={index} />
-    );
-    defaultPlaces.pop();
-  });
+  for (let rowIndex = 0; rowIndex < 5; rowIndex++) {
+    if (rowIndex < resolvedGuesses.length) {
+      // Completed row with evaluated statuses
+      const word = resolvedGuesses[rowIndex];
+      const rowStatus = resolvedEvaluations[rowIndex] || [];
+      for (let colIndex = 0; colIndex < 5; colIndex++) {
+        boardCells.push(
+          <Letter
+            key={`row-${rowIndex}-col-${colIndex}`}
+            letter={word[colIndex] || ""}
+            status={rowStatus[colIndex]}
+            theme={theme}
+          />
+        );
+      }
+    } else if (rowIndex === resolvedGuesses.length) {
+      // Active in-progress row
+      for (let colIndex = 0; colIndex < 5; colIndex++) {
+        boardCells.push(
+          <Letter
+            key={`row-${rowIndex}-col-${colIndex}`}
+            letter={activeGuess[colIndex] || ""}
+            theme={theme}
+          />
+        );
+      }
+    } else {
+      // Future empty row
+      for (let colIndex = 0; colIndex < 5; colIndex++) {
+        boardCells.push(
+          <Letter
+            key={`row-${rowIndex}-col-${colIndex}`}
+            letter=""
+            theme={theme}
+          />
+        );
+      }
+    }
+  }
 
   return (
-    <>
-      <div className="grid grid-cols-[repeat(_5,_75px)] grid-rows-5 gap-3 mx-auto">
-        {userLettersInput}
-        {defaultPlaces}
-      </div>
-    </>
+    <div className="grid grid-cols-[repeat(5,_75px)] grid-rows-5 gap-3 mx-auto">
+      {boardCells}
+    </div>
   );
 };
 

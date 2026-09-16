@@ -4,18 +4,17 @@ import Wordle from "@/app/pages/Wordle";
 const parseWords = (source: string) =>
   source
     .split(/\r?\n/)
-    .map((word) => word.trim())
-    .filter((word) => word.length === 5);
+    .map((word) => word.trim().toLowerCase())
+    .filter((word) => /^[a-zñ]{5}$/.test(word));
 
 export default function App() {
   const [words, setWords] = useState<string[] | null>(null);
   const [error, setError] = useState(false);
-  const [startedAt] = useState(() => Date.now());
 
   useEffect(() => {
     const controller = new AbortController();
 
-    fetch(`${import.meta.env.BASE_URL}words2.md`, { signal: controller.signal })
+    fetch(`${import.meta.env.BASE_URL}words.txt`, { signal: controller.signal })
       .then((response) => {
         if (!response.ok) throw new Error("Unable to load the word list");
         return response.text();
@@ -31,16 +30,24 @@ export default function App() {
   }, []);
 
   if (error) {
-    return <main className="p-8 text-center">No se pudo cargar la lista de palabras.</main>;
+    return (
+      <main className="p-8 text-center text-red-500 font-semibold">
+        No se pudo cargar la lista de palabras.
+      </main>
+    );
   }
 
-  if (!words) {
-    return <main className="p-8 text-center">Cargando…</main>;
+  if (!words || words.length === 0) {
+    return (
+      <main className="p-8 text-center text-lg font-semibold">
+        Cargando…
+      </main>
+    );
   }
 
   return (
     <main className="min-h-full h-full max-w-screen no-scrollbar overflow-x-hidden">
-      <Wordle date={startedAt} words={words} />
+      <Wordle words={words} />
     </main>
   );
 }

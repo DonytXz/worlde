@@ -1,191 +1,135 @@
-"use client";
-/* eslint-disable react-hooks/exhaustive-deps -- keyboard actions run only when their counters or rows change */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useCallback } from "react";
 import Digit from "./Digit";
+import { LetterStatus } from "@/utils/wordle";
 
-const Keyboard = (props: any) => {
-  const queryKeyboard: Array<string> = [
-    "q",
-    "w",
-    "e",
-    "r",
-    "t",
-    "y",
-    "u",
-    "i",
-    "o",
-    "p",
-    "a",
-    "s",
-    "d",
-    "f",
-    "g",
-    "h",
-    "j",
-    "k",
-    "l",
-    "ñ",
-    "enter",
-    "z",
-    "x",
-    "c",
-    "v",
-    "b",
-    "n",
-    "m",
-    "delete",
-  ];
-  const [digit, setDigit] = useState();
-  const [counter, setCounter] = useState(0);
-  const [deleteCounter, setDeleteCounter] = useState(0);
-  const fristRow: Array<any> = [];
-  const secondRow: Array<any> = [];
-  const lastRow: Array<any> = [];
-  let findArrAux: any = [];
+const ROW_1 = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
+const ROW_2 = ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ñ"];
+const ROW_3 = ["enter", "z", "x", "c", "v", "b", "n", "m", "delete"];
 
-  const getWord = (): string => {
-    const rowsLength: number = props.rows.length;
-    const rows = props.rows;
-    let word: string = "";
-    if (rowsLength <= 5) {
-      const row: string = rows.join("");
-      word = row;
-    } else if (rowsLength <= 10 && rowsLength > 5) {
-      const row: string = rows.slice(5, 10).join("");
-      word = row;
-    } else if (rowsLength <= 15 && rowsLength > 10) {
-      const row: string = rows.slice(10, 15).join("");
-      word = row;
-    } else if (rowsLength <= 20 && rowsLength > 15) {
-      const row: string = rows.slice(15, 20).join("");
-      word = row;
-    } else if (rowsLength <= 25 && rowsLength > 20) {
-      const row: string = rows.slice(20, 25).join("");
-      word = row;
-    }
-    return word;
-  };
+interface KeyboardProps {
+  onLetter?: (letter: string) => void;
+  onDelete?: () => void;
+  onEnter?: () => void;
+  keyStatuses?: Record<string, LetterStatus>;
+  theme?: "light" | "dark";
+  disabled?: boolean;
+  // Legacy props
+  currentWChartArr?: string[];
+  findChart?: any;
+  rows?: any;
+  setRows?: any;
+  games?: any;
+  wins?: any;
+  setshowStats?: any;
+  choseWord?: any;
+}
 
-  const setWin = () =>{
-    props.wins.setWins(props.wins.wins+1);
-  }
+const Keyboard: React.FC<KeyboardProps> = ({
+  onLetter,
+  onDelete,
+  onEnter,
+  keyStatuses = {},
+  theme = "light",
+  disabled = false,
+  setRows,
+  rows,
+}) => {
+  const handleKey = useCallback(
+    (key: string) => {
+      if (disabled) return;
 
-  const setGame = () =>{
-    props.games.setGames(props.games.games+1);
-  }
-  const compareWords = () => {
-    findArrAux = [];
-    const word = getWord().trim();
-    const includes = props.currentWChartArr?.some(
-      (element: any, index: number) => {
-        const wordCharacter = word[index];
-        return element.localeCompare(wordCharacter, "es", {
-          sensitivity: "base",
-        }) != 0
-          ? false
-          : true;
+      if (key === "delete" || key === "backspace") {
+        if (onDelete) {
+          onDelete();
+        } else if (setRows && rows && rows.length > 0) {
+          setRows((prev: string[]) => prev.slice(0, -1));
+        }
+      } else if (key === "enter") {
+        if (onEnter) {
+          onEnter();
+        }
+      } else if (/^[a-zñ]$/i.test(key)) {
+        const lower = key.toLowerCase();
+        if (onLetter) {
+          onLetter(lower);
+        } else if (setRows && rows) {
+          setRows((prev: string[]) => [...prev, lower]);
+        }
       }
-    );
+    },
+    [disabled, onDelete, setRows, rows, onEnter, onLetter]
+  );
 
-    props.currentWChartArr?.map((element: string, index: number) => {
-      const wordCharacter = word[index];
-      const atPosition = element.localeCompare(wordCharacter, "es", {
-        sensitivity: "base",
-      });
-      if (atPosition == 0) {
-        findArrAux.push("good");
-      } else if (includes) {
-        findArrAux.push("warn");
-      } else {
-        findArrAux.push("none");
-      }
-    });
-    const isWin = findArrAux.every((element:any) => element == "good");
-    if(isWin){
-      setWin();
-      setGame();
-      props.setshowStats(true);
-    }
-    props.findChart.setChartFind([...props.findChart.chartFind, findArrAux]);
-  };
-
-  queryKeyboard.map((element: string, index: number) => {
-    if (index < 10) {
-      fristRow.push(
-        <Digit
-          theme={props.theme}
-          compare={compareWords}
-          digitCounter={{ counter, setCounter }}
-          set={setDigit}
-          digit={element}
-          key={index}
-        />
-      );
-    } else if (index <= 19) {
-      secondRow.push(
-        <Digit
-          theme={props.theme}
-          compare={compareWords}
-          digitCounter={{ counter, setCounter }}
-          set={setDigit}
-          digit={element}
-          key={index}
-        />
-      );
-    } else {
-      lastRow.push(
-        <Digit
-          theme={props.theme}
-          compare={compareWords}
-          deleteCounter={{ deleteCounter, setDeleteCounter }}
-          digitCounter={{ counter, setCounter }}
-          set={setDigit}
-          digit={element}
-          key={index}
-        />
-      );
-    }
-  });
-
+  // Listen for physical keyboard strokes
   useEffect(() => {
-    if (digit) {
-      if (digit == "delete" && props.rows.length > 0) {
-        props.setRows((prevArr: Array<string>) => prevArr.slice(0, -1));
-        props.findChart.setChartFind((prevArr: Array<string>) =>
-          prevArr.slice(0, -1)
-        );
-      } else if (digit != "enter") {
-        props.setRows([...props.rows, digit]);
-      }
-    }
-  }, [digit, counter, deleteCounter]);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Ignore key strokes with modifier keys (Ctrl, Alt, Meta)
+      if (event.ctrlKey || event.altKey || event.metaKey) return;
 
-  useEffect(() => {
-    if (props.rows.length > 0 && props.rows.length % 5 == 0) {
-      compareWords();
-    }
-  }, [props.rows]);
+      const key = event.key;
+      if (key === "Backspace" || key === "Delete") {
+        event.preventDefault();
+        handleKey("delete");
+      } else if (key === "Enter") {
+        event.preventDefault();
+        handleKey("enter");
+      } else if (/^[a-zA-ZñÑ]$/.test(key)) {
+        event.preventDefault();
+        handleKey(key.toLowerCase());
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKey]);
 
   return (
-    <>
-      <div
-        className={`flex flex-col w-[_638px] h-[_238px] ${
-          props.theme == "light" ? "bg-gray-ligth" : "bg-app-gray-keyboard"
-        }  mx-auto items-center rounded-2xl`}
-      >
-        <div className="my-auto">
-          <div className="grid grid-cols-[repeat(_10,_44.5px)] grid-rows-1 gap-2 mx-auto pl-6">
-            {fristRow.length == queryKeyboard.length - 19 ? fristRow : <></>}
-          </div>
-          <div className="grid grid-cols-[repeat(_10,_44.5px)] grid-rows-1 gap-2 mx-auto pt-2 pl-10">
-            {secondRow.length == queryKeyboard.length - 19 ? secondRow : <></>}
-          </div>
-          <div className="grid lastKeyboardRow grid-rows-1 gap-2 mx-auto pt-2">
-            {lastRow.length == queryKeyboard.length - 20 ? lastRow : <></>}
-          </div>
+    <div
+      className={`flex flex-col w-full max-w-[638px] min-h-[238px] ${
+        theme === "light" ? "bg-gray-ligth" : "bg-app-gray-keyboard"
+      } mx-auto items-center justify-center p-3 rounded-2xl shadow-sm`}
+    >
+      <div className="w-full flex flex-col items-center gap-2">
+        {/* Row 1 */}
+        <div className="flex justify-center gap-1.5 sm:gap-2">
+          {ROW_1.map((letter) => (
+            <Digit
+              key={letter}
+              digit={letter}
+              theme={theme}
+              status={keyStatuses[letter]}
+              onPress={() => handleKey(letter)}
+            />
+          ))}
+        </div>
+
+        {/* Row 2 */}
+        <div className="flex justify-center gap-1.5 sm:gap-2">
+          {ROW_2.map((letter) => (
+            <Digit
+              key={letter}
+              digit={letter}
+              theme={theme}
+              status={keyStatuses[letter]}
+              onPress={() => handleKey(letter)}
+            />
+          ))}
+        </div>
+
+        {/* Row 3 */}
+        <div className="flex justify-center gap-1.5 sm:gap-2">
+          {ROW_3.map((letter) => (
+            <Digit
+              key={letter}
+              digit={letter}
+              theme={theme}
+              status={keyStatuses[letter]}
+              onPress={() => handleKey(letter)}
+            />
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
