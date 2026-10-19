@@ -102,7 +102,7 @@ export const TutorialModal: React.FC<TutorialModalProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="mt-6 bg-app-green hover:brightness-105 active:scale-95 transition-transform w-[263px] h-[50px] mx-auto flex items-center justify-center rounded-lg shadow cursor-pointer text-white text-xl font-bold tracking-wide"
+          className="mt-6 bg-app-green hover:brightness-105 active:scale-95 transition-transform w-[263px] h-[50px] mx-auto flex items-center justify-center rounded-lg shadow-sm cursor-pointer text-white text-xl font-bold tracking-wide"
         >
           !JUGAR¡
         </button>

@@ -31,7 +31,7 @@ export const Modal: React.FC<ModalProps> = ({ children, onClose }) => {
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto no-scrollbar"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 overflow-y-auto no-scrollbar"
       onClick={onClose}
     >
       <div
