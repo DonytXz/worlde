@@ -1,6 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+
+  --color-ligth-gray: #f3f3f3;
+  --color-gray-normal: rgba(147, 155, 159, 0.3);
+  --color-gray: #d3d6da;
+  --color-gray-ligth: rgba(218, 220, 224, 0.3);
+  --color-dark-gray: #939b9f;
+  --color-white-gray: rgba(243, 243, 243, 0.89);
+  --color-app-green: #6aaa64;
+  --color-app-yellow: #ceb02c;
+  --color-app-gray-digit: #565f7e;
+  --color-app-gray-keyboard: rgba(218, 220, 224, 0.03);
+  --color-app-darkers-gray-less: rgba(218, 220, 224, 0.03);
+  --color-app-darkers-gray: #262b3c;
+
+  --text-xsamall: 0.9375rem;
+  --text-small: 1.1875rem;
+  --text-small-plus: 1.75rem;
+  --text-medium: 2.1875rem;
+  --text-big: 2.5rem;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 /* Scrollbar utility */
 .no-scrollbar::-webkit-scrollbar {

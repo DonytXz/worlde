@@ -24,7 +24,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, onToggle }) => 
           onToggle();
         }
       }}
-      className="relative flex flex-row cursor-pointer select-none hover:opacity-90 active:scale-95 transition-all outline-none focus-visible:ring-2 focus-visible:ring-app-green rounded-full"
+      className="relative flex flex-row cursor-pointer select-none hover:opacity-90 active:scale-95 transition-all outline-hidden focus-visible:ring-2 focus-visible:ring-app-green rounded-full"
     >
       {!isDark ? (
         <>

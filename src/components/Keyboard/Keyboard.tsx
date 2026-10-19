@@ -36,7 +36,7 @@ export const Keyboard: React.FC<KeyboardProps> = ({
     <div
       className={`flex flex-col w-full max-w-[638px] min-h-[238px] ${
         theme === "light" ? "bg-gray-ligth" : "bg-app-gray-keyboard"
-      } mx-auto items-center justify-center p-3 rounded-2xl shadow-sm`}
+      } mx-auto items-center justify-center p-3 rounded-2xl shadow-xs`}
     >
       <div className="w-full flex flex-col items-center gap-2">
         {/* Row 1 */}
